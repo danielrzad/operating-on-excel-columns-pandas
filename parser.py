@@ -5,6 +5,13 @@ import column_names_mapping as mapper
 
 from openpyxl import Workbook
 from openpyxl import load_workbook
+from timeit import default_timer as timer
+
+
+# to do
+# naprawic mergowanie, dzialalo dobrze dla dwoch kolumn
+# trzeba zrobic zeby dzialalo dobrze dla wielu kolumn
+
 
 
 def excel_write(df, sheet_name, startrow, startcol):
@@ -28,14 +35,22 @@ def action_check(df, value):
     actions = {
     'merge': merge,
     'svc': svc,
+    'move': move,
     }
     return actions[value.action](df, value)
 
 
+def move(df, value):
+    return df
+
+
 def merge(df, value):
-    left_col=value.old_position[0]
-    right_col=value.old_position[1]
-    df['merged'] = df[left_col].str.cat(df[right_col], na_rep='None')
+    fill_col = value.old_position[0]
+    first_col = value.old_position[1]
+    last_col = value.old_position[-1]
+    df['merged'] = df[fill_col].str.cat(
+        [df[c] for c in df.iloc(:, first_col:last_col + 1)], na_rep='None'
+    )
     return df['merged']
 
 
@@ -54,7 +69,7 @@ def svc(df, value):
 
 
 for key, value in mapper.relationships.items():
-    print(value)
+    start = timer()
     df = pd.read_excel(
         io=mapper.file_paths['input_file'],
         header=None,
@@ -62,6 +77,7 @@ for key, value in mapper.relationships.items():
         skiprows=mapper.settings['first_rows_skipped'],
         usecols=value.old_position,
     )
+    print(df)
     df = action_check(df, value)
     excel_write(
         df=df,
@@ -69,5 +85,7 @@ for key, value in mapper.relationships.items():
         startrow=mapper.settings['first_writing_row'], 
         startcol=value.new_position,
     )
+    end = timer()
+    print(end - start)
 
 print('DONE')

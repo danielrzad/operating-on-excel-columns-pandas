@@ -21,20 +21,22 @@ import parser
 # ]
 actions = {
     '&': 'merge',
-    'svc': 'svc',
+    's': 'svc',
+    'm': 'move'
 }
 
+
 relationships = {
-    'icd10claimdiagdescr01': ['RS', '&', ''],
-    'icd10claimdiagdescr02': ['T&U', '&', ''],
-    'icd10claimdiagdescr03': ['V&W', '&', ''],
-    'svc dept bill name': ['C', 'svc', ''],
-    # 'patient address': '',
-    # 'patient address1': '',
-    # 'patient address2': '',
-    # 'patient city': '',
-    # 'patient state': '',
-    # 'patient zip': '',
+    'icd10claimdiagdescr01': ['RS', '&', ' '],
+    # 'icd10claimdiagdescr02': ['T&U', '&', ''],
+    # 'icd10claimdiagdescr03': ['V&W', '&', ''],
+    # 'svc dept bill name': ['C', 's', ''],
+    'patient address': ['HIJKL', '&', ' '],
+    # 'patient address1': ['H', 'm', ''],
+    # 'patient address2': ['I', 'm', ''],
+    # 'patient city': ['J', 'm', ''],
+    # 'patient state': ['K', 'm', ''],
+    # 'patient zip': ['L,', 'm', ''],
     # 'patientdob': '',
     # 'patient firstname': '',
     # 'patient lastname': '',
@@ -264,4 +266,5 @@ for column_cells in ws.columns:
     ws.column_dimensions[column_cells[0].column_letter].width = length
 wb.save(filename = file_paths['output_file'])
 
-pprint(relationships)
+pprint(relationships['icd10claimdiagdescr01'])
+pprint(relationships['patient address'])

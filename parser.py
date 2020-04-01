@@ -42,14 +42,13 @@ def action_check(df, value):
 
 def move(df, value):
     return df
-
+# https://stackoverflow.com/questions/19377969/combine-two-columns-of-text-in-dataframe-in-pandas-python
 
 def merge(df, value):
-    fill_col = value.old_position[0]
-    first_col = value.old_position[1]
-    last_col = value.old_position[-1]
-    df['merged'] = df[fill_col].str.cat(
-        [df[c] for c in df.iloc(:, first_col:last_col + 1)], na_rep='None'
+    first_col = value.old_position[0]
+    if len(value.old_position)
+    df['merged'] = df[first_col].str.cat(
+        df[[value.old_position[1:]]], sep=value.sep, na_rep='None'
     )
     return df['merged']
 

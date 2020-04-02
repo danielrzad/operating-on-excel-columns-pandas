@@ -45,10 +45,15 @@ def move(df, value):
 # https://stackoverflow.com/questions/19377969/combine-two-columns-of-text-in-dataframe-in-pandas-python
 
 def merge(df, value):
-    first_col = value.old_position[0]
-    if len(value.old_position)
-    df['merged'] = df[first_col].str.cat(
-        df[[value.old_position[1:]]], sep=value.sep, na_rep='None'
+    # df['merged'] = pd.Series(dtype=str)
+    df['merged'] = ''
+    print(df['merged'])
+    # print(df.dtypes)
+    # df.insert(
+    #     value.old_position[-1] + 1, 'merged', 0, allow_duplicates=True)
+    df = df.astype(str)
+    df['merged'] = df['merged'].str.cat(
+        df[value.old_position], sep=value.sep,
     )
     return df['merged']
 
@@ -76,8 +81,9 @@ for key, value in mapper.relationships.items():
         skiprows=mapper.settings['first_rows_skipped'],
         usecols=value.old_position,
     )
-    print(df)
     df = action_check(df, value)
+    df = df.fillna('', inplace=True)
+    print(df)
     excel_write(
         df=df,
         sheet_name='Parsed data', 

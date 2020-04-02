@@ -27,45 +27,45 @@ actions = {
 
 
 relationships = {
-    'icd10claimdiagdescr01': ['RS', '&', ' '],
-    # 'icd10claimdiagdescr02': ['T&U', '&', ''],
-    # 'icd10claimdiagdescr03': ['V&W', '&', ''],
-    # 'svc dept bill name': ['C', 's', ''],
-    'patient address': ['HIJKL', '&', ' '],
-    # 'patient address1': ['H', 'm', ''],
-    # 'patient address2': ['I', 'm', ''],
-    # 'patient city': ['J', 'm', ''],
-    # 'patient state': ['K', 'm', ''],
-    # 'patient zip': ['L,', 'm', ''],
-    # 'patientdob': '',
-    # 'patient firstname': '',
-    # 'patient lastname': '',
-    # 'guarantor addr': '',
-    # 'guarantor addr2': '',
-    # 'guarantor city': '',
-    # 'guarantor email': '',
-    # 'guarantor frstnm': '',
-    # 'guarantor lastnm': '',
-    # 'guarantor phone': '',
-    # 'ptnt grntr rltnshp': '',
-    # 'guarantor state': '',
-    # 'guarantor zip': '',
-    # 'patient homephone': '',
-    # 'patientid': '',
-    # 'patient middleinitial': '',
-    # 'patient mobile no': '',
-    # 'proccode-descr': '',
-    # 'guarantor ssn': '',
-    # 'patient ssn': '',
-    # 'Ordering Physician': '',
-    # 'invid': '',
-    # 'postdate': '',
-    # 'srvdate': '',
-    # 'Discount Threshold': '',
-    # 'Client Billing System': '',
-    # 'Collection Status': '',
-    # 'Client Billing System User/Pass': '',
-    # 'Accepted Payment Forms': '',
+    'icd10claimdiagdescr01': ['R/S', '&', ' '],
+    'icd10claimdiagdescr02': ['T/U', '&', ''],
+    'icd10claimdiagdescr03': ['V/W', '&', ''],
+    'svc dept bill name': ['C', 's', ''],
+    'patient address': ['H/I/J/K/L', '&', ' '],
+    'patient address1': ['H', 'm', ''],
+    'patient address2': ['I', 'm', ''],
+    'patient city': ['J', 'm', ''],
+    'patient state': ['K', 'm', ''],
+    'patient zip': ['L', 'm', ''],
+    'patientdob': ['P', 'm', ''],
+    'patient firstname': ['F', 'm', ''],
+    'patient lastname': ['E', 'm', ''],
+    'guarantor addr': ['AT', 'm', ''],
+    'guarantor addr2': ['AU', 'm', ''],
+    'guarantor city': ['AV', 'm', ''],
+    'guarantor email': ['BA', 'm', ''],
+    'guarantor frstnm': ['AS', 'm', ''],
+    'guarantor lastnm': ['AR', 'm', ''],
+    'guarantor phone': ['AY', 'm', ''],
+    'ptnt grntr rltnshp': ['AQ', 'm', ''],
+    'guarantor state': ['AW', 'm', ''],
+    'guarantor zip': ['AX', 'm', ''],
+    'patient homephone': ['M', 'm', ''],
+    'patientid': ['O', 'm', ''],
+    'patient middleinitial': ['G', 'm', ''],
+    'patient mobile no': ['N', 'm', ''],
+    'proccode-descr': ['AJ/AB', '&', '-'],
+    # 'guarantor ssn': ['M', 'm', ''],
+    # 'patient ssn': ['M', 'm', ''],
+    # 'Ordering Physician': ['M', 'm', ''],
+    # 'invid': ['M', 'm', ''],
+    # 'postdate': ['M', 'm', ''],
+    # 'srvdate': ['M', 'm', ''],
+    # 'Discount Threshold': ['M', 'm', ''],
+    # 'Client Billing System': ['M', 'm', ''],
+    # 'Collection Status': ['M', 'm', ''],
+    # 'Client Billing System User/Pass': ['M', 'm', ''],
+    # # 'Accepted Payment Forms': '',
     # 'Financial Class': '',
     # 'Client Billing System URL': '',
     # 'Responsibility Date': '',
@@ -223,15 +223,6 @@ alphabet_to_num = {
     'CF': 83,
 }
 
-# actions_identicator = {
-#     '&': parser.merge_columns(
-#         df=df, column_idx=value.old_position[0], sep=' '
-#     ),
-    
-# }
-
-
-
 
 DataKey = make_dataclass(
     'DataKey', ['old_position', 'new_position', 'action', 'sep']
@@ -244,11 +235,14 @@ for key, value in relationships.items():
     column_indexes = []
     action = ''
     sep = value[2]
-    for letter in value[0]:
-        if letter in alphabet_to_num:
-            column_indexes.append(alphabet_to_num[letter])
+    for char in value[0].split('/'):
+        if char in alphabet_to_num:
+            print(value[0].split())
+            print(char)
+            column_indexes.append(alphabet_to_num[char])
     if value[1] in actions:
         action = actions[value[1]]
+    print(column_indexes)
     relationships[key] = DataKey(
         old_position=column_indexes,
         new_position=new_pos,
@@ -256,6 +250,7 @@ for key, value in relationships.items():
         sep=sep,
     )
     new_pos += 1
+
 
 wb = Workbook()
 ws = wb.active
@@ -266,5 +261,4 @@ for column_cells in ws.columns:
     ws.column_dimensions[column_cells[0].column_letter].width = length
 wb.save(filename = file_paths['output_file'])
 
-pprint(relationships['icd10claimdiagdescr01'])
-pprint(relationships['patient address'])
+pprint(relationships)

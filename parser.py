@@ -9,8 +9,8 @@ from timeit import default_timer as timer
 
 
 # to do
-# naprawic mergowanie, dzialalo dobrze dla dwoch kolumn
-# trzeba zrobic zeby dzialalo dobrze dla wielu kolumn
+# patientdob pandas odczytuje to jako format daty i godziny musi dczytywac jako str
+
 
 
 
@@ -42,15 +42,10 @@ def action_check(df, value):
 
 def move(df, value):
     return df
-# https://stackoverflow.com/questions/19377969/combine-two-columns-of-text-in-dataframe-in-pandas-python
 
 def merge(df, value):
-    # df['merged'] = pd.Series(dtype=str)
     df['merged'] = ''
-    print(df['merged'])
-    # print(df.dtypes)
-    # df.insert(
-    #     value.old_position[-1] + 1, 'merged', 0, allow_duplicates=True)
+    print(df)
     df = df.astype(str)
     df['merged'] = df['merged'].str.cat(
         df[value.old_position], sep=value.sep,
@@ -80,10 +75,9 @@ for key, value in mapper.relationships.items():
         names=value.old_position,
         skiprows=mapper.settings['first_rows_skipped'],
         usecols=value.old_position,
+        keep_default_na=False,
     )
     df = action_check(df, value)
-    df = df.fillna('', inplace=True)
-    print(df)
     excel_write(
         df=df,
         sheet_name='Parsed data', 

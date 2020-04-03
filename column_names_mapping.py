@@ -21,81 +21,219 @@ import parser
 # ]
 actions = {
     '&': 'merge',
-    's': 'svc',
-    'm': 'move'
+    'svc': 'svc',
+    'm': 'move',
+    'w': 'write',
+    'ssn': 'ssn',
 }
 
 
 relationships = {
-    'icd10claimdiagdescr01': ['R/S', '&', ' '],
-    'icd10claimdiagdescr02': ['T/U', '&', ''],
-    'icd10claimdiagdescr03': ['V/W', '&', ''],
-    'svc dept bill name': ['C', 's', ''],
-    'patient address': ['H/I/J/K/L', '&', ' '],
-    'patient address1': ['H', 'm', ''],
-    'patient address2': ['I', 'm', ''],
-    'patient city': ['J', 'm', ''],
-    'patient state': ['K', 'm', ''],
-    'patient zip': ['L', 'm', ''],
-    'patientdob': ['P', 'm', ''],
-    'patient firstname': ['F', 'm', ''],
-    'patient lastname': ['E', 'm', ''],
-    'guarantor addr': ['AT', 'm', ''],
-    'guarantor addr2': ['AU', 'm', ''],
-    'guarantor city': ['AV', 'm', ''],
-    'guarantor email': ['BA', 'm', ''],
-    'guarantor frstnm': ['AS', 'm', ''],
-    'guarantor lastnm': ['AR', 'm', ''],
-    'guarantor phone': ['AY', 'm', ''],
-    'ptnt grntr rltnshp': ['AQ', 'm', ''],
-    'guarantor state': ['AW', 'm', ''],
-    'guarantor zip': ['AX', 'm', ''],
-    'patient homephone': ['M', 'm', ''],
-    'patientid': ['O', 'm', ''],
-    'patient middleinitial': ['G', 'm', ''],
-    'patient mobile no': ['N', 'm', ''],
-    'proccode-descr': ['AJ/AB', '&', '-'],
-    # 'guarantor ssn': ['M', 'm', ''],
-    # 'patient ssn': ['M', 'm', ''],
-    # 'Ordering Physician': ['M', 'm', ''],
-    # 'invid': ['M', 'm', ''],
-    # 'postdate': ['M', 'm', ''],
-    # 'srvdate': ['M', 'm', ''],
-    # 'Discount Threshold': ['M', 'm', ''],
-    # 'Client Billing System': ['M', 'm', ''],
-    # 'Collection Status': ['M', 'm', ''],
-    # 'Client Billing System User/Pass': ['M', 'm', ''],
-    # # 'Accepted Payment Forms': '',
-    # 'Financial Class': '',
-    # 'Client Billing System URL': '',
-    # 'Responsibility Date': '',
-    # 'Client Name': '',
-    # '3rd Party Correspondence': '',
-    # 'Script': '',
-    # 'Early Out Correspondence': '',
-    # 'Client Payment Mailing Address': '',
-    # 'Client Payment System': '',
-    # 'Callback Number': '',
-    # 'Minimum Payment': '',
-    # 'Internal Account Status': '',
-    # 'Client Phone': '',
-    # 'Billing Provider': '',
-    # 'Claim Received Date': '',
-    # 'Client Billing Contact': '',
-    # 'Client Payment System URL': '',
-    # 'Client Website': '',
-    # 'Aging Bucket': '',
-    # 'Customer Service Email': '',
-    # 'Specialty': '',
-    # 'Custom Account Number': '',
-    # 'charge off date': '',
-    # 'originated date': '',
-    # 'Patient Address': '',
-    # 'Phone Number1': '',
-    # 'Phone Number2': '',
-    # 'Phone Number3': '',
-    # 'Phone Number4': '',
-    # 'creditor': '',
+    # 'icd10claimdiagdescr01': {
+    #     'columns': 'R/S', 'action': '&', 'sep': '',
+    # },
+    # 'icd10claimdiagdescr02': {
+    #     'columns': 'T/U', 'action': '&', 'sep': '',
+    # },
+    # 'icd10claimdiagdescr03': {
+    #     'columns': 'V/W', 'action': '&', 'sep': '',
+    # },
+    # 'svc dept bill name': {
+    #     'columns': 'C', 'action': 'svc', 'sep': '',
+    # },
+    # 'patient address': {
+    #     'columns': 'H/I/J/K/L', 'action': '&',
+    # },
+    # 'patient address1': {
+    #     'columns': 'H', 'action': 'm',
+    # },
+    # 'patient address2': {
+    #     'columns': 'I', 'action': 'm',
+    # },
+    # 'patient city':{
+    #     'columns': 'F', 'action': 'm',
+    # },
+    # 'patient state': {
+    #     'columns': 'K', 'action': 'm',
+    # },
+    # 'patient zip': {
+    #     'columns': 'L', 'action': 'm',
+    # },
+    # 'patientdob': {
+    #     'columns': 'P', 'action': 'm',
+    # },
+    # 'patient firstname': {
+    #     'columns': 'F', 'action': 'm',
+    # },
+    # 'patient lastname': {
+    #     'columns': 'E', 'action': 'm',
+    # },
+    # 'guarantor addr': {
+    #     'columns': 'AT', 'action': 'm',
+    # },
+    # 'guarantor addr2': {
+    #     'columns': 'AU', 'action': 'm',
+    # },
+    # 'guarantor city': {
+    #     'columns': 'AV', 'action': 'm',
+    # },
+    # 'guarantor email': {
+    #     'columns': 'BA', 'action': 'm',
+    # },
+    # 'guarantor frstnm': {
+    #     'columns': 'AS', 'action': 'm',
+    # },
+    # 'guarantor lastnm': {
+    #     'columns': 'AR', 'action': 'm',
+    # },
+    # 'guarantor phone': {
+    #     'columns': 'AY', 'action': 'm',
+    # },
+    # 'ptnt grntr rltnshp': {
+    #     'columns': 'AQ', 'action': 'm',
+    # },
+    # 'guarantor state': {
+    #     'columns': 'AW', 'action': 'm',
+    # },
+    # 'guarantor zip': {
+    #     'columns': 'AX', 'action': 'm',
+    # },
+    # 'patient homephone': {
+    #     'columns': 'M', 'action': 'm',
+    # },
+    # 'patientid': {
+    #     'columns': 'O', 'action': 'm',
+    # },
+    # 'patient middleinitial': {
+    #     'columns': 'G', 'action': 'm',
+    # },
+    # 'patient mobile no': {
+    #     'columns': 'N', 'action': 'm',
+    # },
+    # 'proccode-descr': {
+    #     'columns': 'AJ/AB', 'action': '&', 'sep': '-',
+    # },
+    'guarantor ssn': {
+        'columns': 'O', 'action': 'ssn', 'add_info': '110',
+    },
+    # 'patient ssn': {
+    #     'columns': 'O', 'action': 'ssn', 'add_info': '010',
+    # },
+    # 'Ordering Physician': {
+    #     'columns': 'AM', 'action': 'm',
+    # },
+    # 'invid': {
+    #     'columns': 'A', 'action': 'm',
+    # },
+    # 'postdate': {
+    #     'columns': 'B', 'action': 'm',
+    # },
+    # 'srvdate': {
+    #     'columns': 'AC', 'action': 'm',
+    # },
+    # 'Discount Threshold': {
+    #     'columns': '', 'action': 'w', 'add_info': '30% W/O Mgt Approval',
+    # },
+    # 'Client Billing System': {
+    #     'columns': '', 'action': 'w', 'add_info': 'Brightree',
+    # },
+    # # 'Collection Status': {
+    # #     'columns': '', 'action': '',
+    # # },
+    # 'Client Billing System User/Pass': {
+    #     'columns': '', 'action': 'w', 'add_info': 'See Management',
+    # },
+    # 'Accepted Payment Forms': {
+    #     'columns': '', 'action': 'w', 
+    #     'add_info': 'Credit, Debit, e-Check, Mail-In',
+    # },
+    # 'Financial Class': {
+    #     'columns': '', 'action': 'w', 'add_info': 'Patient Responsibility',
+    # },
+    # 'Client Billing System URL': {
+    #     'columns': '', 'action': 'w', 
+    #     'add_info': 'https://login.brightree.net/',
+    # },
+    # 'Responsibility Date': {
+    #     'columns': 'B', 'action': 'm',
+    # },
+    # # 'Client Name': '',
+    # '3rd Party Correspondence': {
+    #     'columns': '', 'action': 'w', 
+    #     'add_info': 'Innovare-Virtual Post Mail',
+    # },
+    # # 'Script': '',
+    # 'Early Out Correspondence': {
+    #     'columns': '', 'action': 'w', 'add_info': 'Managed By Client',
+    # },
+    # 'Client Payment Mailing Address': {
+    #     'columns': '', 'action': 'w', 
+    #     'add_info': '340 S Lemon Ave #1102 Walnut, CA 91789',
+    # },
+    # 'Client Payment System': {
+    #     'columns': '', 'action': 'w', 'add_info': 'Repay',
+    # },
+    # 'Callback Number': {
+    #     'columns': '', 'action': 'w', 'add_info': '(405) 200-1666',
+    # },
+    # 'Minimum Payment': {
+    #     'columns': '', 'action': 'w', 'add_info': '$10,00',
+    # },
+    # # 'Internal Account Status': '',
+    # 'Client Phone': {
+    #     'columns': '', 'action': 'w', 'add_info': '(405) 200-1666',
+    # },
+    # 'Billing Provider': {
+    #     'columns': 'D', 'action': 'm',
+    # },
+    # # 'Claim Received Date': '',
+    # 'Client Billing Contact': {
+    #     'columns': '', 'action': 'w', 
+    #     'add_info': 'Sinthya Cruz-Billing Manager',
+    # },
+    # 'Client Payment System URL': {
+    #     'columns': '', 'action': 'w', 
+    #     'add_info': 'https://innovareprm.repay.io',
+    # },
+    # 'Client Website': {
+    #     'columns': '', 'action': 'w', 'add_info': 'N/A',
+    # },
+    # # 'Aging Bucket': '',
+    # 'Customer Service Email': {
+    #     'columns': '', 'action': 'w', 'add_info': 'support@innovareprm.com',
+    # },
+    # 'Specialty': {
+    #     'columns': '', 'action': 'w', 
+    #     'add_info': 'Sleep Medicine and Supplies',
+    # },
+    # # 'Custom Account Number': {
+    # #     'columns': 'O/AC', 'action': 'acc_num',
+    # # },
+    # 'charge off date': {
+    #     'columns': 'B', 'action': 'm',
+    # },
+    # 'originated date': {
+    #     'columns': 'AC', 'action': 'm',
+    # },
+    # 'Patient Address': {
+    #     'columns': 'H/I/J/K/L', 'action': '&',
+    # },
+    # 'Phone Number1': {
+    #     'columns': 'M', 'action': 'm',
+    # },
+    # 'Phone Number2': {
+    #     'columns': 'N', 'action': 'm',
+    # },
+    # 'Phone Number3': {
+    #     'columns': 'AY', 'action': 'm',
+    # },
+    # 'Phone Number4': {
+    #     'columns': 'AZ', 'action': 'm',
+    # },
+    # 'creditor': {
+    #     'columns': '', 'action': 'w', 
+    #     'add_info': 'Echelon Medical',
+    # },
     # 'Action Code': '',
     # 'original claim amount (DOS Rows)': '',
     # 'Balance (DOS Rows)': '',
@@ -223,31 +361,25 @@ alphabet_to_num = {
     'CF': 83,
 }
 
-
 DataKey = make_dataclass(
-    'DataKey', ['old_position', 'new_position', 'action', 'sep']
+    'DataKey', ['old_position', 'new_position', 'action', 'sep', 'add_info']
 )
 
 new_pos = 0
 for key, value in relationships.items():
-    if isinstance(value, int):
-        continue
     column_indexes = []
-    action = ''
-    sep = value[2]
-    for char in value[0].split('/'):
+    action = value.get('action', '') 
+    sep = value.get('sep', ' ') 
+    add_info = value.get('add_info', 'tygrys')
+    for char in value['columns'].split('/'):
         if char in alphabet_to_num:
-            print(value[0].split())
-            print(char)
             column_indexes.append(alphabet_to_num[char])
-    if value[1] in actions:
-        action = actions[value[1]]
-    print(column_indexes)
     relationships[key] = DataKey(
         old_position=column_indexes,
         new_position=new_pos,
         action=action,
         sep=sep,
+        add_info=add_info,
     )
     new_pos += 1
 

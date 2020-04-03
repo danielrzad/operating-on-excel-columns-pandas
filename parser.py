@@ -25,6 +25,7 @@ def excel_write(df, sheet_name, startrow, startcol):
         sheet_name=sheet_name,
         startrow=startrow,
         startcol=startcol,
+        dtype=object,
         header=False,
         index=False,
     )
@@ -36,12 +37,10 @@ def action_check(df, value):
     'merge': merge,
     'svc': svc,
     'move': move,
+    'ssn': ssn,
     }
     return actions[value.action](df, value)
 
-
-def move(df, value):
-    return df
 
 def merge(df, value):
     df['merged'] = ''
@@ -65,6 +64,16 @@ def svc(df, value):
     }
     df = df.replace(cities)
     return df
+
+
+def move(df, value):
+    return df
+
+
+def ssn(df, value):
+    df['ssn'] = value.add_info
+    df[value.old_position[0]] = df[value.old_position[0]].str.cat(df['ssn'])
+    return df[value.old_position]
 
 
 for key, value in mapper.relationships.items():

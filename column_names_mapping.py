@@ -60,7 +60,7 @@ relationships = {
     #     'columns': 'L', 'action': 'm',
     # },
     # 'patientdob': {
-    #     'columns': 'P', 'action': 'm',
+    #     'columns': 'P', 'action': 'm', 'datetime_format': 'DD.MM.YYYY'
     # },
     # 'patient firstname': {
     #     'columns': 'F', 'action': 'm',
@@ -113,9 +113,9 @@ relationships = {
     # 'proccode-descr': {
     #     'columns': 'AJ/AB', 'action': '&', 'sep': '-',
     # },
-    'guarantor ssn': {
-        'columns': 'O', 'action': 'ssn', 'add_info': '110',
-    },
+    # 'guarantor ssn': {
+    #     'columns': 'O', 'action': 'ssn', 'add_info': '110',
+    # },
     # 'patient ssn': {
     #     'columns': 'O', 'action': 'ssn', 'add_info': '010',
     # },
@@ -137,9 +137,9 @@ relationships = {
     # 'Client Billing System': {
     #     'columns': '', 'action': 'w', 'add_info': 'Brightree',
     # },
-    # # 'Collection Status': {
-    # #     'columns': '', 'action': '',
-    # # },
+    'Collection Status': {
+        'columns': '', 'action': '',
+    },
     # 'Client Billing System User/Pass': {
     #     'columns': '', 'action': 'w', 'add_info': 'See Management',
     # },
@@ -260,7 +260,8 @@ settings = {
     'first_rows_skipped': [0, 1, 2], 
     # row from which u want to start filling excel
     # for eg. u want to skip headers so we start writing from first row
-    'first_writing_row': 1, 
+    'first_writing_row': 1,
+    'total_rows': 6336,
 }
 
 
@@ -362,7 +363,9 @@ alphabet_to_num = {
 }
 
 DataKey = make_dataclass(
-    'DataKey', ['old_position', 'new_position', 'action', 'sep', 'add_info']
+    'DataKey',
+    ['old_position', 'new_position', 'action', 'sep', 'add_info', 
+    'date_format', 'datetime_format']
 )
 
 new_pos = 0
@@ -370,7 +373,9 @@ for key, value in relationships.items():
     column_indexes = []
     action = value.get('action', '') 
     sep = value.get('sep', ' ') 
-    add_info = value.get('add_info', 'tygrys')
+    add_info = value.get('add_info', '')
+    date_format = value.get('date_format', None)
+    datetime_format = value.get('datetime_format', None)
     for char in value['columns'].split('/'):
         if char in alphabet_to_num:
             column_indexes.append(alphabet_to_num[char])
@@ -380,6 +385,8 @@ for key, value in relationships.items():
         action=action,
         sep=sep,
         add_info=add_info,
+        date_format=date_format,
+        datetime_format=datetime_format,
     )
     new_pos += 1
 

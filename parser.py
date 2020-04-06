@@ -9,7 +9,9 @@ from timeit import default_timer as timer
 
 
 # co do zrobienia
-# zajac sie Collection Status
+# zajac sie Collection Status based od patientdob (dath of birth)
+# https://stackoverflow.com/questions/33140496/how-can-i-substract-a-single-value-from-a-column-using-pandas-and-python
+#https://stackoverflow.com/questions/37840812/pandas-subtracting-two-date-columns-and-the-result-being-an-integer
 
 def excel_write(
     df, sheet_name, startrow, startcol, date_format, datetime_format
@@ -47,7 +49,6 @@ def excel_read(
     return df
 
 
-
 def action_check(value):
     actions = {
     'merge': merge,
@@ -55,6 +56,7 @@ def action_check(value):
     'm': move,
     'ssn': ssn,
     'w': write,
+    'collection_status': collection_status,
     }
     return actions[value.action](value)
 
@@ -148,6 +150,19 @@ def write(value):
     print(df.dtypes)
     return df
 
+
+def collection_status(value):
+    df = excel_read(
+        io=mapper.file_paths['input_file'], 
+        header=None, 
+        names=value.old_position,
+        skiprows=mapper.settings['first_rows_skipped'], 
+        usecols=value.old_position, 
+        keep_default_na=False,
+    )
+    print(df)
+    print(df.dtypes)
+    
 
 for key, value in mapper.relationships.items():
     start = timer()

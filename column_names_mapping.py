@@ -60,7 +60,7 @@ relationships = {
     #     'columns': 'L', 'action': 'm',
     # },
     # 'patientdob': {
-    #     'columns': 'P', 'action': 'm', 'datetime_format': 'DD.MM.YYYY'
+    #     'columns': 'P', 'action': 'm', 'datetime_format': 'DD-MM-YYYY'
     # },
     # 'patient firstname': {
     #     'columns': 'F', 'action': 'm',
@@ -138,7 +138,7 @@ relationships = {
     #     'columns': '', 'action': 'w', 'add_info': 'Brightree',
     # },
     'Collection Status': {
-        'columns': '', 'action': '',
+        'columns': 'P', 'action': 'collection_status',
     },
     # 'Client Billing System User/Pass': {
     #     'columns': '', 'action': 'w', 'add_info': 'See Management',

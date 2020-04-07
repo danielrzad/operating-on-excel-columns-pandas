@@ -5,6 +5,7 @@ import column_names_mapping as mapper
 
 from openpyxl import Workbook
 from openpyxl import load_workbook
+from datetime import date
 from timeit import default_timer as timer
 
 
@@ -159,10 +160,15 @@ def collection_status(value):
         skiprows=mapper.settings['first_rows_skipped'], 
         usecols=value.old_position, 
         keep_default_na=False,
-    )
+    )  
+    now = pd.to_datetime('now')
+    df[value.old_position[0]] = (
+        now - df[value.old_position[0]]
+    ).dt.total_seconds() // (60*60*24*365.25)
     print(df)
     print(df.dtypes)
-    
+
+
 
 for key, value in mapper.relationships.items():
     start = timer()

@@ -1,5 +1,9 @@
-import pandas
+from datetime import date
+import numpy as np
 
-s = pandas.Series(data='foo', index=list(range(6350)), name=15, copy=False)
-
-print(s)
+today = date.today()
+print(today)
+print(type(today))
+dt64 = np.datetime64(today)
+print(dt64)
+print(type(dt64))

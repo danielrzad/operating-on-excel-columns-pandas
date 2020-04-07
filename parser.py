@@ -167,7 +167,18 @@ def collection_status(value):
     ).dt.total_seconds() // (60*60*24*365.25)
     print(df)
     print(df.dtypes)
+    col = df[value.old_position[0]]
 
+    print(df)
+    print(df.dtypes)
+
+
+
+# https://stackoverflow.com/questions/39358092/range-as-dictionary-key-in-python
+
+# https://stackoverflow.com/questions/21608228/conditional-replace-pandas
+
+# https://stackoverflow.com/questions/61088190/change-series-values-based-on-condition-eg-if-0-x-10-x-blah
 
 
 for key, value in mapper.relationships.items():

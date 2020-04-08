@@ -1,18 +1,15 @@
 import pandas as pd
 import numpy as np
 import column_names_mapping as mapper
-
+import math
 
 from openpyxl import Workbook
 from openpyxl import load_workbook
 from datetime import date
 from timeit import default_timer as timer
 
+# to do list
 
-# co do zrobienia
-# zajac sie Collection Status based od patientdob (dath of birth)
-# https://stackoverflow.com/questions/33140496/how-can-i-substract-a-single-value-from-a-column-using-pandas-and-python
-#https://stackoverflow.com/questions/37840812/pandas-subtracting-two-date-columns-and-the-result-being-an-integer
 
 def excel_write(
     df, sheet_name, startrow, startcol, date_format, datetime_format
@@ -58,6 +55,7 @@ def action_check(value):
     'ssn': ssn,
     'w': write,
     'collection_status': collection_status,
+    'aging_bucket': aging_bucket,
     }
     return actions[value.action](value)
 
@@ -165,20 +163,33 @@ def collection_status(value):
     df[value.old_position[0]] = (
         now - df[value.old_position[0]]
     ).dt.total_seconds() // (60*60*24*365.25)
-    print(df)
-    print(df.dtypes)
     col = df[value.old_position[0]]
+    df.loc[(col>=0) & (col<=30), value.old_position[0]] = 'STATEMENT 1'
+    df.loc[(col>=31) & (col<=60), value.old_position[0]] = 'STATEMENT 2'
+    df.loc[(col>61), value.old_position[0]] = "LETTER 26"
+    return df
 
+
+def aging_bucket(value):
+    df = excel_read(
+        io=mapper.file_paths['input_file'], 
+        header=None, 
+        names=value.old_position,
+        skiprows=mapper.settings['first_rows_skipped'], 
+        usecols=value.old_position, 
+        keep_default_na=False,
+    ) 
+    print(df)
+    print(df.dtypes) 
+    now = pd.to_datetime('now')
+    print(now)
+    df[value.old_position[0]] = (
+        now - df[value.old_position[0]]
+    ).dt.total_seconds() // (60*60*24)
     print(df)
     print(df.dtypes)
 
-
-
-# https://stackoverflow.com/questions/39358092/range-as-dictionary-key-in-python
-
-# https://stackoverflow.com/questions/21608228/conditional-replace-pandas
-
-# https://stackoverflow.com/questions/61088190/change-series-values-based-on-condition-eg-if-0-x-10-x-blah
+#math ceil
 
 
 for key, value in mapper.relationships.items():

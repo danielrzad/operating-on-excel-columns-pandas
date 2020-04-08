@@ -137,9 +137,9 @@ relationships = {
     # 'Client Billing System': {
     #     'columns': '', 'action': 'w', 'add_info': 'Brightree',
     # },
-    'Collection Status': {
-        'columns': 'P', 'action': 'collection_status',
-    },
+    # 'Collection Status': {
+    #     'columns': 'P', 'action': 'collection_status',
+    # },
     # 'Client Billing System User/Pass': {
     #     'columns': '', 'action': 'w', 'add_info': 'See Management',
     # },
@@ -157,7 +157,11 @@ relationships = {
     # 'Responsibility Date': {
     #     'columns': 'B', 'action': 'm',
     # },
-    # # 'Client Name': '',
+
+
+    # # 'Client Name': '', based od aging buckets
+
+
     # '3rd Party Correspondence': {
     #     'columns': '', 'action': 'w', 
     #     'add_info': 'Innovare-Virtual Post Mail',
@@ -198,7 +202,9 @@ relationships = {
     # 'Client Website': {
     #     'columns': '', 'action': 'w', 'add_info': 'N/A',
     # },
-    # # 'Aging Bucket': '',
+    'Aging Bucket': {
+        'columns': 'B', 'action': 'aging_bucket', 'add_info': '',
+    }
     # 'Customer Service Email': {
     #     'columns': '', 'action': 'w', 'add_info': 'support@innovareprm.com',
     # },

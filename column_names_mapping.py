@@ -157,11 +157,9 @@ relationships = {
     # 'Responsibility Date': {
     #     'columns': 'B', 'action': 'm',
     # },
-
-
-    # # 'Client Name': '', based od aging buckets
-
-
+    'Client Name': {
+        'columns': 'B', 'action': 'client_name',
+    },
     # '3rd Party Correspondence': {
     #     'columns': '', 'action': 'w', 
     #     'add_info': 'Innovare-Virtual Post Mail',

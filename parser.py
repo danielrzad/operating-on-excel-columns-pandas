@@ -56,6 +56,7 @@ def action_check(value):
     'w': write,
     'collection_status': collection_status,
     'aging_bucket': aging_bucket,
+    'client_name': client_name,
     }
     return actions[value.action](value)
 
@@ -90,13 +91,13 @@ def svc(value):
         keep_default_na=False,
     )
     cities = {
-    'Oklahoma City': 'Echelon Medical',
-    'Oklahoma City BP': 'The Brace Place',
-    'Oklahoma City FS': 'First Steps Orthotics',
-    'Tulsa': 'Echelon Medical',
-    'Tulsa BP': 'The Brace Place',
-    'Tulsa FS': 'First Steps Orthotics',
-    'Medical Motion': 'Medical Motion',
+        'Oklahoma City': 'Echelon Medical',
+        'Oklahoma City BP': 'The Brace Place',
+        'Oklahoma City FS': 'First Steps Orthotics',
+        'Tulsa': 'Echelon Medical',
+        'Tulsa BP': 'The Brace Place',
+        'Tulsa FS': 'First Steps Orthotics',
+        'Medical Motion': 'Medical Motion',
     }
     df = df.replace(cities)
     print(df)
@@ -159,14 +160,16 @@ def collection_status(value):
         usecols=value.old_position, 
         keep_default_na=False,
     )  
+    col_idx = value.old_position[0]
     now = pd.to_datetime('now')
-    df[value.old_position[0]] = (
-        now - df[value.old_position[0]]
-    ).dt.total_seconds() // (60*60*24*365.25)
-    col = df[value.old_position[0]]
-    df.loc[(col>=0) & (col<=30), value.old_position[0]] = 'STATEMENT 1'
-    df.loc[(col>=31) & (col<=60), value.old_position[0]] = 'STATEMENT 2'
-    df.loc[(col>61), value.old_position[0]] = "LETTER 26"
+    df[col_idx] = (now - df[col_idx]).dt.total_seconds() // (60*60*24*365.25)
+    df.loc[
+        (col_idx>=0) & (col_idx<=30), value.old_position[0]
+    ] = 'STATEMENT 1'
+    df.loc[
+        (col_idx>=31) & (col_idx<=60), value.old_position[0]
+    ] = 'STATEMENT 2'
+    df.loc[(col_idx>61), value.old_position[0]] = "LETTER 26"
     return df
 
 
@@ -178,19 +181,79 @@ def aging_bucket(value):
         skiprows=mapper.settings['first_rows_skipped'], 
         usecols=value.old_position, 
         keep_default_na=False,
-    ) 
-    print(df)
-    print(df.dtypes) 
+    )
+    col_idx = value.old_position[0]
     now = pd.to_datetime('now')
-    print(now)
-    df[value.old_position[0]] = (
-        now - df[value.old_position[0]]
-    ).dt.total_seconds() // (60*60*24)
-    print(df)
-    print(df.dtypes)
+    df[col_idx] = (now - df[col_idx]).dt.total_seconds() // (60*60*24)
+    df.loc[
+        (df[col_idx]>=0) & (df[col_idx]<=30), value.old_position[0]
+    ] = '0-30'
+    df.loc[
+        (df[col_idx]>=31) & (df[col_idx]<=60), value.old_position[0]
+    ] = '31-60'
+    df.loc[
+        (df[col_idx]>=61) & (df[col_idx]<=90), value.old_position[0]
+    ] = '61-90'
+    df.loc[
+        (df[col_idx]>=91) & (df[col_idx]<=120), value.old_position[0]
+    ] = '91-120'
+    df.loc[
+        (df[col_idx]>=121) & (df[col_idx]<=360), value.old_position[0]
+    ] = '121-360'
+    df.loc[
+        (df[col_idx]>=361) & (df[col_idx]<=9999), value.old_position[0]
+    ] = '361-9999'
+    return df
 
-#math ceil
 
+def client_name(value):
+    df = excel_read(
+        io=mapper.file_paths['input_file'], 
+        header=None, 
+        names=value.old_position,
+        skiprows=mapper.settings['first_rows_skipped'], 
+        usecols=value.old_position, 
+        keep_default_na=False,
+    )
+    days_range = {
+        '0-30': '010E01',
+        '31-60': '010E02',
+        '61-90': '010PR1',
+        '91-120': '010LT1',
+        '121-210': '010LT2',
+        '211-300': '010LT2A',
+        '301-360': '010LT2B',
+        '361-9999': '010LT3',
+    }
+    col_idx = value.old_position[0]
+    now = pd.to_datetime('now')
+    df[col_idx] = (now - df[col_idx]).dt.total_seconds() // (60*60*24)
+    df.loc[
+        (df[col_idx]>=0) & (df[col_idx]<=30), value.old_position[0]
+    ] = '0-30'
+    df.loc[
+        (df[col_idx]>=31) & (df[col_idx]<=60), value.old_position[0]
+    ] = '31-60'
+    df.loc[
+        (df[col_idx]>=61) & (df[col_idx]<=90), value.old_position[0]
+    ] = '61-90'
+    df.loc[
+        (df[col_idx]>=91) & (df[col_idx]<=120), value.old_position[0]
+    ] = '91-120'
+    df.loc[
+        (df[col_idx]>=121) & (df[col_idx]<=360), value.old_position[0]
+    ] = '121-360'
+    df.loc[
+        (df[col_idx]>=211) & (df[col_idx]<=300), value.old_position[0]
+    ] = '211-300'
+    df.loc[
+        (df[col_idx]>=301) & (df[col_idx]<=360), value.old_position[0]
+    ] = '301-360'
+    df.loc[
+        (df[col_idx]>=361) & (df[col_idx]<=9999), value.old_position[0]
+    ] = '361-9999'
+    df = df.replace(days_range)
+    return df
 
 for key, value in mapper.relationships.items():
     start = timer()

@@ -157,9 +157,9 @@ relationships = {
     # 'Responsibility Date': {
     #     'columns': 'B', 'action': 'm',
     # },
-    'Client Name': {
-        'columns': 'B', 'action': 'client_name',
-    },
+    # 'Client Name': {
+    #     'columns': 'B', 'action': 'client_name',
+    # },
     # '3rd Party Correspondence': {
     #     'columns': '', 'action': 'w', 
     #     'add_info': 'Innovare-Virtual Post Mail',
@@ -200,9 +200,9 @@ relationships = {
     # 'Client Website': {
     #     'columns': '', 'action': 'w', 'add_info': 'N/A',
     # },
-    'Aging Bucket': {
-        'columns': 'B', 'action': 'aging_bucket', 'add_info': '',
-    }
+    # 'Aging Bucket': {
+    #     'columns': 'B', 'action': 'aging_bucket', 'add_info': '',
+    # }
     # 'Customer Service Email': {
     #     'columns': '', 'action': 'w', 'add_info': 'support@innovareprm.com',
     # },
@@ -210,9 +210,9 @@ relationships = {
     #     'columns': '', 'action': 'w', 
     #     'add_info': 'Sleep Medicine and Supplies',
     # },
-    # # 'Custom Account Number': {
-    # #     'columns': 'O/AC', 'action': 'acc_num',
-    # # },
+    # 'Custom Account Number': {
+    #     'columns': 'O/AC', 'action': 'acc_num', 'sep': '-'
+    # },
     # 'charge off date': {
     #     'columns': 'B', 'action': 'm',
     # },
@@ -238,7 +238,7 @@ relationships = {
     #     'columns': '', 'action': 'w', 
     #     'add_info': 'Echelon Medical',
     # },
-    # 'Action Code': '',
+    'Action Code': '',
     # 'original claim amount (DOS Rows)': '',
     # 'Balance (DOS Rows)': '',
     # r'10% discount': '',

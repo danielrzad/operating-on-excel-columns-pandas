@@ -57,6 +57,7 @@ def action_check(value):
     'collection_status': collection_status,
     'aging_bucket': aging_bucket,
     'client_name': client_name,
+    'acc_num': acc_num,
     }
     return actions[value.action](value)
 
@@ -162,7 +163,7 @@ def collection_status(value):
     )  
     col_idx = value.old_position[0]
     now = pd.to_datetime('now')
-    df[col_idx] = (now - df[col_idx]).dt.total_seconds() // (60*60*24*365.25)
+    df[col_idx] = (now - df[col_idx]).dt.total_seconds() / (60*60*24*365.25)
     df.loc[
         (col_idx>=0) & (col_idx<=30), value.old_position[0]
     ] = 'STATEMENT 1'
@@ -254,6 +255,27 @@ def client_name(value):
     ] = '361-9999'
     df = df.replace(days_range)
     return df
+
+
+def acc_num(value):
+    df = excel_read(
+        io=mapper.file_paths['input_file'], 
+        header=None, 
+        names=value.old_position,
+        skiprows=mapper.settings['first_rows_skipped'], 
+        usecols=value.old_position, 
+        keep_default_na=False,
+    )
+    col0_idx = value.old_position[0]
+    col1_idx = value.old_position[1]
+    df[col1_idx] = df[col1_idx].dt.strftime('%m.%d.%Y')
+    df = df.astype(str)
+    df['eml'] = 'EML'
+    df[col0_idx] = df[col0_idx].str.cat(
+        df[[col1_idx, 'eml']], sep=value.sep,
+    )
+    return df[col0_idx]
+
 
 for key, value in mapper.relationships.items():
     start = timer()

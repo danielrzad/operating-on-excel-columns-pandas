@@ -21,7 +21,7 @@ import parser
 # ]
 actions = {
     '&': 'merge',
-    'svc': 'svc',
+    'dict_replace': 'dict_replace',
     'm': 'move',
     'w': 'write',
     'ssn': 'ssn',
@@ -39,7 +39,16 @@ relationships = {
     #     'columns': 'V/W', 'action': '&', 'sep': '',
     # },
     # 'svc dept bill name': {
-    #     'columns': 'C', 'action': 'svc', 'sep': '',
+    #     'columns': 'C', 'action': 'dict_replace', 
+    #     'add_info': {
+    #         'Oklahoma City': 'Echelon Medical',
+    #         'Oklahoma City BP': 'The Brace Place',
+    #         'Oklahoma City FS': 'First Steps Orthotics',
+    #         'Tulsa': 'Echelon Medical',
+    #         'Tulsa BP': 'The Brace Place',
+    #         'Tulsa FS': 'First Steps Orthotics',
+    #         'Medical Motion': 'Medical Motion',
+    #     },
     # },
     # 'patient address': {
     #     'columns': 'H/I/J/K/L', 'action': '&',
@@ -163,8 +172,10 @@ relationships = {
     # '3rd Party Correspondence': {
     #     'columns': '', 'action': 'w', 
     #     'add_info': 'Innovare-Virtual Post Mail',
+    # },dict_replace
+    # 'Script': {
+    #     'columns': 'B', 'action': 'm',
     # },
-    # # 'Script': '',
     # 'Early Out Correspondence': {
     #     'columns': '', 'action': 'w', 'add_info': 'Managed By Client',
     # },
@@ -238,7 +249,7 @@ relationships = {
     #     'columns': '', 'action': 'w', 
     #     'add_info': 'Echelon Medical',
     # },
-    'Action Code': '',
+    # 'Action Code': '',
     # 'original claim amount (DOS Rows)': '',
     # 'Balance (DOS Rows)': '',
     # r'10% discount': '',
@@ -248,11 +259,21 @@ relationships = {
     # r'30% discount': '',
     # 'original claim amount (Totals Row)': '',
     # 'Balance (Totals Row)': '',
-    # 'Invoice Detail Charge': '',
-    # 'Invoice Detail Allow': '',
-    # 'Invoice Detail Payments': '',
-    # 'Invoice Detail Adjustments': '',
-    # 'Invoice Detail Balance': '',
+    # 'Invoice Detail Charge': {
+    #     'columns': 'AE', 'action': 'm',
+    # },
+    # 'Invoice Detail Allow': {
+    #     'columns': 'AF', 'action': 'm',
+    # },
+    # 'Invoice Detail Payments': {
+    #     'columns': 'AG', 'action': 'm',
+    # },
+    # 'Invoice Detail Adjustments': {
+    #     'columns': 'AH', 'action': 'm',
+    # },
+    # 'Invoice Detail Balance': {
+    #     'columns': 'AI', 'action': 'm',
+    # },
 }
 
 
@@ -261,7 +282,8 @@ settings = {
     'output_file_name': 'Parsed data',
     # rows to skip in input file for eg. headeers
     # integers need to be placed in list, 0 is always the first row/column
-    'first_rows_skipped': [0, 1, 2], 
+    'first_rows_skipped': [0, 1, 2],
+    'cols_to_read': 'A:BA',
     # row from which u want to start filling excel
     # for eg. u want to skip headers so we start writing from first row
     'first_writing_row': 1,
@@ -403,5 +425,3 @@ for column_cells in ws.columns:
     length = max(len(cell.value) + 5 for cell in column_cells)
     ws.column_dimensions[column_cells[0].column_letter].width = length
 wb.save(filename = file_paths['output_file'])
-
-pprint(relationships)

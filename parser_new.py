@@ -74,6 +74,8 @@ def ssn(df, value, output_col_name):
     df[output_col_name] = df[value.old_position[0]].astype(str).str.cat(
         [df['0s'], df['ssn']]
     )
+    # del df['ssn']
+    # del df['0s']
     return df[output_col_name]
 
 
@@ -140,20 +142,26 @@ def client_name(df, value, output_col_name):
     return df[ocn]
 
 
-def acc_num(key, value):
+def acc_num(df, value, output_col_name):
+    df[output_col_name] = pd.Series(
+        data=value.add_info, 
+        index=range(mapper.settings['total_rows']), 
+        name=value.new_position,
+    )
     ocn = output_col_name
     col0_idx = value.old_position[0]
     col1_idx = value.old_position[1]
     df[col1_idx] = df[col1_idx].dt.strftime('%m.%d.%Y')
-    df = df.astype(str)
     df['eml'] = 'EML'
-    df[col0_idx] = df[col0_idx].str.cat(
+    df[ocn] = df[col0_idx].astype(str).str.cat(
         df[[col1_idx, 'eml']], sep=value.sep,
     )
-    return df[col0_idx]
+    # del df['eml']
+    return df[ocn]
 
 
-def main():     
+def main():
+    print(list(mapper.relationships.keys()))
     df = pd.read_excel(
         io=mapper.file_paths['input_file'],
         header=None,

@@ -42,6 +42,8 @@ def action_check(df, value, output_col_name):
         'aging_bucket': aging_bucket,
         'client_name': client_name,
         'acc_num': acc_num,
+        'action_code': action_code,
+        'currency': currency,
     }
     return actions[value.action](df, value, output_col_name)
 
@@ -138,6 +140,7 @@ def client_name(df, value, output_col_name):
         '010E01', '010E02', '010PR1', '010LT1', '010LT2', '010LT2A',
         '010LT2B', '010LT3'
     ]
+    print(df[ocn])
     df[ocn] = np.select(masks, vals, default=0)
     return df[ocn]
 
@@ -160,8 +163,39 @@ def acc_num(df, value, output_col_name):
     return df[ocn]
 
 
+def action_code(df, value, output_col_name):
+    ocn = output_col_name
+    col_idx = value.old_position[0]    
+    df[ocn] = df[value.old_position[0]]
+    masks = [
+        (df[ocn] == 0)
+    ]
+    vals = ['INFO ACCOUNT']
+    print(df[ocn])
+    df[ocn] = np.select(masks, vals, default='CORRESPONDENCE ACCOUNT')
+    return df[output_col_name]
+
+
+def format_currency(x):
+    thousands_separator = " "
+    fractional_separator = ","
+    x = '${:,.2f}'.format(x) 
+    main_currency = x.split('.')[0]
+    fractional_currency = x.split('.')[1]
+    new_main_currency = main_currency.replace(',', '.')
+    x = new_main_currency + fractional_separator + fractional_currency
+    return x
+
+def currency(df, value, output_col_name):
+    ocn = output_col_name
+    col_idx = value.old_position[0]   
+    df[ocn] = df[col_idx].apply(format_currency)
+    return df[ocn]
+    
+
+
+
 def main():
-    print(list(mapper.relationships.keys()))
     df = pd.read_excel(
         io=mapper.file_paths['input_file'],
         header=None,

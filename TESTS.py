@@ -1,9 +1,6 @@
 from random import randint
+import pandas as pd
 
-dct = {
-	0: 'ranked',
-	1: 'to co Jaś chce',
-}
+#now = pd.to_datetime('now')
 
-r = randint(0, 1)
-print(dct[r])
+print(pd.to_datetime('now'))

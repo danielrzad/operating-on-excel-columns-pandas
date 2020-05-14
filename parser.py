@@ -1,12 +1,9 @@
+from datetime import date
+
+
 import pandas as pd
 import numpy as np
 import column_names_mapping as mapper
-import math
-
-from openpyxl import Workbook
-from openpyxl import load_workbook
-from datetime import date
-from timeit import default_timer as timer
 
 
 def excel_write(
@@ -74,11 +71,7 @@ def ssn(df, value, output_col_name):
 
 
 def write(df, value, output_col_name):
-    df[output_col_name] = pd.Series(
-        data=value.add_info, 
-        index=range(mapper.settings['total_rows']), 
-        name=value.new_position,
-    )
+    df[output_col_name] = value.add_info
     return df[output_col_name]
 
 
@@ -137,14 +130,10 @@ def client_name(df, value, output_col_name):
 
 
 def acc_num(df, value, output_col_name):
-    df[output_col_name] = pd.Series(
-        data=value.add_info, 
-        index=range(mapper.settings['total_rows']), 
-        name=value.new_position,
-    )
     ocn = output_col_name
     col0_idx = value.old_position[0]
     col1_idx = value.old_position[1]
+    df[ocn] = value.add_info
     df[col1_idx] = df[col1_idx].dt.strftime('%m.%d.%Y')
     df['eml'] = 'EML'
     df[ocn] = df[col0_idx].astype(str).str.cat(
@@ -174,6 +163,7 @@ def format_currency(x):
     new_main_currency = main_currency.replace(',', '.')
     x = new_main_currency + fractional_separator + fractional_currency
     return x
+
 
 def currency(df, value, output_col_name):
     ocn = output_col_name

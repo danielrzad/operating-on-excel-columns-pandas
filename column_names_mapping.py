@@ -1,23 +1,16 @@
 from dataclasses import make_dataclass
-from openpyxl import Workbook
 from pathlib import Path
-from pprint import pprint
 
 
 import pandas as pd
 
 # README
 # To specify a colum position in input Excel file just write
-# 'Column Title': 'Colum Name'
+# 'output column name': 'excel column location'
+# in the relationships dictionary
 # for eg.
 # 'icd10claimdiagdescr01': 'R'
-#
-# relationships:
-# place in list [
-# 'columns which compose on the key', 
-# 'action identicator',
-# 'option: separator'
-# ]
+
 actions = {
     '&': 'merge',
     'dict_replace': 'dict_replace',
@@ -301,11 +294,6 @@ settings = {
     # rows to skip in input file for eg. headeers
     # integers need to be placed in list, 0 is always the first row/column
     'first_rows_skipped': [0, 1, 2],
-    'cols_to_read': 'A:BA',
-    # row from which u want to start filling excel
-    # for eg. u want to skip headers so we start writing from first row
-    'first_writing_row': 1,
-    'total_rows': 6336,
 }
 
 
